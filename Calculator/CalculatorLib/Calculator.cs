@@ -3,14 +3,202 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
-namespace CalculatorLib
+namespace WpfCalculator
 {
-    public class Calculator : ICalculatable
+    public class Calculator
     {
-        public string Calculate(string operation)
+        public static string Wynik(string rownanie, int indexCounter, int start)
         {
-            throw new NotImplementedException();
+
+            // int ia, ib ... not used in code storage for numbers from TryParse
+            List<string> listaCzesciRownania = new List<string>();
+            List<int> listaStarterow = new List<int>();
+            listaStarterow.Add(start);
+            string wynik = "0";
+            bool negativeValuePreviousCheck = false;
+            bool negativeValueDoubleCheck;
+            bool negativeValue = false;
+            int cyfra;
+
+            Regex exPobieraczRownania = new Regex(@"(?<czescRownania>((\D)|(\d+)))");
+            MatchCollection mcRownanie = exPobieraczRownania.Matches(rownanie, indexCounter);
+            foreach (Match mRownanie in mcRownanie)
+            {
+                if (indexCounter == mRownanie.Index)
+                {
+                    string czescRownania = mRownanie.Groups["czescRownania"].Value;
+
+                    if (czescRownania == "(")
+                    {
+                        listaStarterow.Add(indexCounter);
+                        listaCzesciRownania.Add(Wynik(rownanie, indexCounter, indexCounter));
+                        listaStarterow.RemoveAt(listaStarterow.Count - 1);
+                    }
+                    if (czescRownania == ")")
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        switch (negativeValue)
+                        {
+                            case false:
+
+                                negativeValueDoubleCheck = Int32.TryParse(czescRownania, out cyfra);
+                                if (negativeValuePreviousCheck == true)
+                                {
+                                    listaCzesciRownania.Add(czescRownania);
+                                }
+                                if (negativeValuePreviousCheck == false)
+                                {
+                                    if (negativeValueDoubleCheck == false)
+                                    {
+                                        negativeValue = true;
+                                    }
+                                    if (negativeValueDoubleCheck == true)
+                                    {
+                                        listaCzesciRownania.Add(czescRownania);
+                                        while (cyfra / 10 > 0)
+                                        {
+                                            indexCounter++;
+                                            cyfra = cyfra / 10;
+                                        }
+                                    }
+                                }
+                                break;
+
+                            case true:
+
+                                listaCzesciRownania.Add("-" + czescRownania);
+                                negativeValue = false;
+                                break;
+
+                        }
+
+                        negativeValuePreviousCheck = Int32.TryParse(czescRownania, out int ia);
+                        indexCounter++;
+                        cyfra = 0;
+                    }
+                }
+            }
+
+
+
+            int liczba;
+            for (int i = listaStarterow[listaStarterow.Count - 1]; i < listaCzesciRownania.Count; i++)
+            {
+                bool checkIfnumber = Int32.TryParse(listaCzesciRownania[i], out liczba);
+                if (checkIfnumber != true)
+                {
+                    Double earlierNumber = Double.Parse(listaCzesciRownania[i - 1]);
+                    Double nextNumber = Double.Parse(listaCzesciRownania[i + 1]);
+                    switch (listaCzesciRownania[i])
+                    {
+
+                        case "/":
+
+                            earlierNumber = earlierNumber / nextNumber;
+                            listaCzesciRownania[i - 1] = earlierNumber.ToString();
+                            listaCzesciRownania[i + 1] = earlierNumber.ToString();
+                            break;
+
+                        case "*":
+                            earlierNumber = earlierNumber * nextNumber;
+                            listaCzesciRownania[i - 1] = earlierNumber.ToString();
+                            listaCzesciRownania[i + 1] = earlierNumber.ToString();
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                }
+            }
+
+            for (int i = (listaCzesciRownania.Count - 1); i > listaStarterow[listaStarterow.Count - 1]; i--)
+            {
+                bool checkIfnumber = Int32.TryParse(listaCzesciRownania[i], out liczba);
+                if (checkIfnumber != true)
+                {
+                    Double earlierNumber = Double.Parse(listaCzesciRownania[i - 1]);
+                    Double nextNumber = Double.Parse(listaCzesciRownania[i + 1]);
+                    switch (listaCzesciRownania[i])
+                    {
+
+                        case "/":
+
+                            listaCzesciRownania[i - 1] = listaCzesciRownania[i + 1];
+                            break;
+
+                        case "*":
+                            listaCzesciRownania[i - 1] = listaCzesciRownania[i + 1];
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                }
+            }
+
+            for (int i = listaStarterow[listaStarterow.Count - 1]; i < listaCzesciRownania.Count; i++)
+            {
+                bool checkIfNumber = Int32.TryParse(listaCzesciRownania[i], out liczba);
+                if (checkIfNumber != true)
+                {
+                    Double earlierNumber = Double.Parse(listaCzesciRownania[i - 1]);
+                    Double nextNumber = Double.Parse(listaCzesciRownania[i + 1]);
+                    switch (listaCzesciRownania[i])
+                    {
+                        case "+":
+                            earlierNumber = earlierNumber + nextNumber;
+                            listaCzesciRownania[i - 1] = earlierNumber.ToString();
+                            listaCzesciRownania[i + 1] = earlierNumber.ToString();
+                            listaCzesciRownania[i] = earlierNumber.ToString();
+                            break;
+                        case "-":
+                            earlierNumber = earlierNumber - nextNumber;
+                            listaCzesciRownania[i - 1] = earlierNumber.ToString();
+                            listaCzesciRownania[i + 1] = earlierNumber.ToString();
+                            listaCzesciRownania[i] = earlierNumber.ToString();
+                            break;
+
+                        case "/":
+                            listaCzesciRownania[i + 1] = earlierNumber.ToString();
+                            listaCzesciRownania[i] = earlierNumber.ToString();
+                            break;
+
+                        case "*":
+                            listaCzesciRownania[i + 1] = earlierNumber.ToString();
+                            listaCzesciRownania[i] = earlierNumber.ToString();
+                            break;
+
+                        default:
+                            break;
+
+                    }
+                }
+                if (i != 0)
+                {
+                    if (checkIfNumber == true)
+                    {
+                        bool checkIfPreviousNumber = Double.TryParse(listaCzesciRownania[i - 1], out double wartosc);
+                        if (checkIfPreviousNumber == true)
+                        {
+                            listaCzesciRownania[i] = listaCzesciRownania[i - 1];
+                        }
+
+                    }
+                }
+            }
+
+            wynik = listaCzesciRownania[listaCzesciRownania.Count - 1];
+
+            return wynik;
+
         }
     }
 }
+
