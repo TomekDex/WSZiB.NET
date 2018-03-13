@@ -14,7 +14,7 @@ namespace WpfCalculator
 
             // int ia, ib ... not used in code storage for numbers from TryParse
             List<string> listaCzesciRownania = new List<string>();
-                        string wynik = "0";
+            string wynik = "0";
             bool negativeValuePreviousCheck = false;
             bool negativeValueDoubleCheck;
             bool negativeValue = false;
@@ -30,17 +30,7 @@ namespace WpfCalculator
                     indexCounter++;
                     string czescRownania = mRownanie.Groups["czescRownania"].Value;
 
-                    if (czescRownania == "(")
-                    {
-                        listaCzesciRownania.Add(Wynik(rownanie, indexCounter, out int indexCounterNext));
-                        indexCounter = indexCounterNext;
-
-                    }
-                    if (czescRownania == ")")
-                    {
-                        break;
-                    }
-                    else
+                    if (czescRownania != "(" && czescRownania != ")")
                     {
                         switch (negativeValue)
                         {
@@ -76,12 +66,22 @@ namespace WpfCalculator
                                 break;
 
                         }
-
-                        negativeValuePreviousCheck = Int32.TryParse(czescRownania, out int ia);
-                        //indexCounter++;
-                        cyfra = 0;
                     }
+                    if (czescRownania == "(")
+                    {
+                        listaCzesciRownania.Add(Wynik(rownanie, indexCounter, out int indexCounterNext));
+                        indexCounter = indexCounterNext;
+                        czescRownania = listaCzesciRownania[listaCzesciRownania.Count - 1];
+                    }
+                    if (czescRownania == ")")
+                    {
+                        break;
+                    }
+                    negativeValuePreviousCheck = Int32.TryParse(czescRownania, out int ia);
+                    //indexCounter++;
+                    cyfra = 0;
                 }
+
             }
 
 
