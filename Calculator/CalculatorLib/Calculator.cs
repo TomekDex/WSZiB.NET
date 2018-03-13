@@ -9,18 +9,17 @@ namespace WpfCalculator
 {
     public class Calculator
     {
-        public static string Wynik(string rownanie, int indexCounter, int start)
+        public static string Wynik(string rownanie, int indexCounter, out int indexCounterNew)
         {
 
             // int ia, ib ... not used in code storage for numbers from TryParse
             List<string> listaCzesciRownania = new List<string>();
-            List<int> listaStarterow = new List<int>();
-            listaStarterow.Add(start);
-            string wynik = "0";
+                        string wynik = "0";
             bool negativeValuePreviousCheck = false;
             bool negativeValueDoubleCheck;
             bool negativeValue = false;
             int cyfra;
+
 
             Regex exPobieraczRownania = new Regex(@"(?<czescRownania>((\D)|(\d+)))");
             MatchCollection mcRownanie = exPobieraczRownania.Matches(rownanie, indexCounter);
@@ -28,13 +27,14 @@ namespace WpfCalculator
             {
                 if (indexCounter == mRownanie.Index)
                 {
+                    indexCounter++;
                     string czescRownania = mRownanie.Groups["czescRownania"].Value;
 
                     if (czescRownania == "(")
                     {
-                        listaStarterow.Add(indexCounter);
-                        listaCzesciRownania.Add(Wynik(rownanie, indexCounter, indexCounter));
-                        listaStarterow.RemoveAt(listaStarterow.Count - 1);
+                        listaCzesciRownania.Add(Wynik(rownanie, indexCounter, out int indexCounterNext));
+                        indexCounter = indexCounterNext;
+
                     }
                     if (czescRownania == ")")
                     {
@@ -78,7 +78,7 @@ namespace WpfCalculator
                         }
 
                         negativeValuePreviousCheck = Int32.TryParse(czescRownania, out int ia);
-                        indexCounter++;
+                        //indexCounter++;
                         cyfra = 0;
                     }
                 }
@@ -87,7 +87,7 @@ namespace WpfCalculator
 
 
             int liczba;
-            for (int i = listaStarterow[listaStarterow.Count - 1]; i < listaCzesciRownania.Count; i++)
+            for (int i = 0; i < listaCzesciRownania.Count; i++)
             {
                 bool checkIfnumber = Int32.TryParse(listaCzesciRownania[i], out liczba);
                 if (checkIfnumber != true)
@@ -117,7 +117,7 @@ namespace WpfCalculator
                 }
             }
 
-            for (int i = (listaCzesciRownania.Count - 1); i > listaStarterow[listaStarterow.Count - 1]; i--)
+            for (int i = (listaCzesciRownania.Count - 1); i > 0; i--)
             {
                 bool checkIfnumber = Int32.TryParse(listaCzesciRownania[i], out liczba);
                 if (checkIfnumber != true)
@@ -143,7 +143,7 @@ namespace WpfCalculator
                 }
             }
 
-            for (int i = listaStarterow[listaStarterow.Count - 1]; i < listaCzesciRownania.Count; i++)
+            for (int i = 0; i < listaCzesciRownania.Count; i++)
             {
                 bool checkIfNumber = Int32.TryParse(listaCzesciRownania[i], out liczba);
                 if (checkIfNumber != true)
@@ -195,7 +195,7 @@ namespace WpfCalculator
             }
 
             wynik = listaCzesciRownania[listaCzesciRownania.Count - 1];
-
+            indexCounterNew = indexCounter;
             return wynik;
 
         }
