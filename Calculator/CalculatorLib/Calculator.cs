@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
-namespace WpfCalculator
+namespace CalculatorLib
 {
-    public class Calculator
+    public class Calculator /*: ICalculatable*/
     {
-        public static string Wynik(string rownanie, int indexCounter, out int indexCounterNew)
+        public static string Calculate(string rownanie, int indexCounter, out int indexCounterNew)
         {
 
             // int ia, ib ... not used in code storage for numbers from TryParse
@@ -69,7 +69,7 @@ namespace WpfCalculator
                     }
                     if (czescRownania == "(")
                     {
-                        listaCzesciRownania.Add(Wynik(rownanie, indexCounter, out int indexCounterNext));
+                        listaCzesciRownania.Add(Calculate(rownanie, indexCounter, out int indexCounterNext));
                         indexCounter = indexCounterNext;
                         czescRownania = listaCzesciRownania[listaCzesciRownania.Count - 1];
                     }

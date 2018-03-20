@@ -33,7 +33,7 @@ namespace CalculatorWin
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             rownanie = Operation.Text;
-            wyniczek = WpfCalculator.Calculator.Wynik(rownanie, indexCounter, out int IndexCounterNew);
+            wyniczek = Calculator.Calculate(rownanie, indexCounter, out int IndexCounterNew);
             Operation.Text = wyniczek;
         }
     }
