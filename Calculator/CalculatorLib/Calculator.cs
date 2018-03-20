@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace CalculatorLib
 {
-    public class Calculator /*: ICalculatable*/
+    public class Calculator /*:ICalculatable*/ /*static member nie moze miec interface ?*/
     {
         public static string Calculate(string rownanie, int indexCounter, out int indexCounterNew)
         {
