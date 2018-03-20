@@ -8,6 +8,6 @@ namespace CalculatorLib
 {
     interface ICalculatable
     {
-        string Calculate(string operation, int indexCounter, out int xxx);
+        string Calculate(string operation);
     }
 }

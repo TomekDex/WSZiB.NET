@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
-namespace WpfCalculatorLib
+namespace CalculatorLib
 {
     public class WpfCalculator /*:ICalculatable*/ /*static member nie moze miec interface ?*/
     {
