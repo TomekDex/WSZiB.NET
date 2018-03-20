@@ -78,7 +78,6 @@ namespace WpfCalculator
                         break;
                     }
                     negativeValuePreviousCheck = Int32.TryParse(czescRownania, out int ia);
-                    //indexCounter++;
                     cyfra = 0;
                 }
 

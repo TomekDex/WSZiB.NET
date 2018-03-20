@@ -1,5 +1,5 @@
-﻿using System;
-using System.Data;
+﻿using CalculatorLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WpfCalculator
+namespace CalculatorWin
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -24,24 +24,17 @@ namespace WpfCalculator
         string rownanie = "21+2/2-5*2";
         int indexCounter = 0;
         string wyniczek;
+
         public MainWindow()
         {
             InitializeComponent();
         }
 
-
-        private void przyciskPrzeliczenia_Click(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //wyniczek = Calculator.Wynik(rownanie);
-            wyniczek = Calculator.Wynik(rownanie, indexCounter, out int IndexCounterNew);
-            wynikPrzeliczenia.Text = wyniczek;
+            rownanie = Operation.Text;
+            wyniczek = WpfCalculator.Calculator.Wynik(rownanie, indexCounter, out int IndexCounterNew);
+            Operation.Text = wyniczek;
         }
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            rownanie = podaneRownanie.Text;
-        }
-
-
     }
 }
