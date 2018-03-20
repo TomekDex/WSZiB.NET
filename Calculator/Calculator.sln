@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorWin", "Calculator
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorLib", "CalculatorLib\CalculatorLib.csproj", "{029D6A21-56C8-4C52-B2FC-EECDC218B195}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorLibTests_TomekDex", "CalculatorLibTests_TomekDex\CalculatorLibTests_TomekDex.csproj", "{BAC3A475-F6C0-4EB0-8D5F-8F26B046F710}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{029D6A21-56C8-4C52-B2FC-EECDC218B195}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{029D6A21-56C8-4C52-B2FC-EECDC218B195}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{029D6A21-56C8-4C52-B2FC-EECDC218B195}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAC3A475-F6C0-4EB0-8D5F-8F26B046F710}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAC3A475-F6C0-4EB0-8D5F-8F26B046F710}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAC3A475-F6C0-4EB0-8D5F-8F26B046F710}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAC3A475-F6C0-4EB0-8D5F-8F26B046F710}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
