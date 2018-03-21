@@ -21,10 +21,6 @@ namespace CalculatorWin
     /// </summary>
     public partial class MainWindow : Window
     {
-        string rownanie = "21+2/2-5*2";
-        int indexCounter = 0;
-        string wyniczek;
-
         public MainWindow()
         {
             InitializeComponent();
@@ -32,10 +28,8 @@ namespace CalculatorWin
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            rownanie = Operation.Text;
-            //wyniczek = WpfCalculator.WpfCalculate(rownanie, indexCounter, out int IndexCounterNew);
-            wyniczek = new Calculator(rownanie);
-            Operation.Text = wyniczek;
+            Calculator calculator = new Calculator();
+            Operation.Text = calculator.Calculate(Operation.Text);
         }
     }
 }

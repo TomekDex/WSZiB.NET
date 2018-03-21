@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace CalculatorLib
 {
-    class Calculator : ICalculatable
+    public class Calculator : ICalculatable
     {
         private string rownanie;
 
         public string Calculate(string rownanie)
         {
             this.rownanie = rownanie;
-            rownanie = WpfCalculator.WpfCalculate(rownanie, 0, out int ic);
+            int ic;
+            rownanie = WpfCalculator.WpfCalculate(rownanie, 0, out ic);
             return rownanie;
         }
     }

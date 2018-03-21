@@ -69,15 +69,18 @@ namespace CalculatorLib
                     }
                     if (czescRownania == "(")
                     {
-                        listaCzesciRownania.Add(WpfCalculate(rownanie, indexCounter, out int indexCounterNext));
+                        int indexCounterNext;
+                        listaCzesciRownania.Add(WpfCalculate(rownanie, indexCounter, out indexCounterNext));
                         indexCounter = indexCounterNext;
                         czescRownania = listaCzesciRownania[listaCzesciRownania.Count - 1];
                     }
+                
                     if (czescRownania == ")")
                     {
                         break;
                     }
-                    negativeValuePreviousCheck = Int32.TryParse(czescRownania, out int ia);
+                    int ia;
+                    negativeValuePreviousCheck = Int32.TryParse(czescRownania, out ia);
                     cyfra = 0;
                 }
 
@@ -183,7 +186,8 @@ namespace CalculatorLib
                 {
                     if (checkIfNumber == true)
                     {
-                        bool checkIfPreviousNumber = Double.TryParse(listaCzesciRownania[i - 1], out double wartosc);
+                        double wartosc;
+                        bool checkIfPreviousNumber = Double.TryParse(listaCzesciRownania[i - 1], out wartosc);
                         if (checkIfPreviousNumber == true)
                         {
                             listaCzesciRownania[i] = listaCzesciRownania[i - 1];
