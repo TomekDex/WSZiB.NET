@@ -15,13 +15,10 @@ namespace CalculatorLib
             // int ia, ib ... not used in code storage for numbers from TryParse
             List<string> equationPartsList = new List<string>();
             string result = "0";
-            bool negativeValuePreviousCheck = false;
-            bool negativeValueDoubleCheck;
             bool negativeValue = false;
             bool numberCheck;
             int digit;
-
-
+            
             Regex exEquationLoader = new Regex(@"(?<czescRownania>((\D)|(\d+)))");
             MatchCollection mcEquation = exEquationLoader.Matches(equation, indexCounter);
             foreach (Match mRownanie in mcEquation)
@@ -70,7 +67,6 @@ namespace CalculatorLib
                         break;
                     }
                     int ia;
-                    negativeValuePreviousCheck = Int32.TryParse(equationPart, out ia);
                     digit = 0;
                 }
 
