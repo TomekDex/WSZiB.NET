@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorWin", "Calculator
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorLib", "CalculatorLib\CalculatorLib.csproj", "{029D6A21-56C8-4C52-B2FC-EECDC218B195}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorLibTestsNiobar", "CalculatorLibTests1\CalculatorLibTestsNiobar.csproj", "{86C365AA-B6DB-4BA4-BB82-F1DDFE8C5C58}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorLibTestsNiobar", "CalculatorLibTestsNiobar\CalculatorLibTestsNiobar.csproj", "{86C365AA-B6DB-4BA4-BB82-F1DDFE8C5C58}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
