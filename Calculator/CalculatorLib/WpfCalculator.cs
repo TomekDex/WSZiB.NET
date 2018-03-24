@@ -74,7 +74,7 @@ namespace CalculatorLib
                     Double nextNumber = Double.Parse(equationPartsList[i + 1]);
                     switch (equationPartsList[i])
                     {
-
+                        // When adding new operation remember to add it to operationCheck and operationChekPrevious in EquationNormalizer 
                         case "/":
 
                             earlierNumber = earlierNumber / nextNumber;
