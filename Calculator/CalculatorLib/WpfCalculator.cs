@@ -7,39 +7,39 @@ using System.Text.RegularExpressions;
 
 namespace CalculatorLib
 {
-    public class WpfCalculator /*:ICalculatable*/ /*static member nie moze miec interface ?*/
+    public class WpfCalculator 
     {
-        public static string WpfCalculate(string rownanie, int indexCounter, out int indexCounterNew)
+        public static string WpfCalculate(string equation, int indexCounter, out int indexCounterNew)
         {
 
             // int ia, ib ... not used in code storage for numbers from TryParse
-            List<string> listaCzesciRownania = new List<string>();
-            string wynik = "0";
+            List<string> equationPartsList = new List<string>();
+            string result = "0";
             bool negativeValuePreviousCheck = false;
             bool negativeValueDoubleCheck;
             bool negativeValue = false;
-            int cyfra;
+            int digit;
 
 
-            Regex exPobieraczRownania = new Regex(@"(?<czescRownania>((\D)|(\d+)))");
-            MatchCollection mcRownanie = exPobieraczRownania.Matches(rownanie, indexCounter);
-            foreach (Match mRownanie in mcRownanie)
+            Regex exEquationLoader = new Regex(@"(?<czescRownania>((\D)|(\d+)))");
+            MatchCollection mcEquation = exEquationLoader.Matches(equation, indexCounter);
+            foreach (Match mEquation in mcEquation)
             {
-                if (indexCounter == mRownanie.Index)
+                if (indexCounter == mEquation.Index)
                 {
                     indexCounter++;
-                    string czescRownania = mRownanie.Groups["czescRownania"].Value;
+                    string equationPart = mEquation.Groups["czescRownania"].Value;
 
-                    if (czescRownania != "(" && czescRownania != ")")
+                    if (equationPart != "(" && equationPart != ")")
                     {
                         switch (negativeValue)
                         {
                             case false:
 
-                                negativeValueDoubleCheck = Int32.TryParse(czescRownania, out cyfra);
+                                negativeValueDoubleCheck = Int32.TryParse(equationPart, out digit);
                                 if (negativeValuePreviousCheck == true)
                                 {
-                                    listaCzesciRownania.Add(czescRownania);
+                                    equationPartsList.Add(equationPart);
                                 }
                                 if (negativeValuePreviousCheck == false)
                                 {
@@ -49,11 +49,11 @@ namespace CalculatorLib
                                     }
                                     if (negativeValueDoubleCheck == true)
                                     {
-                                        listaCzesciRownania.Add(czescRownania);
-                                        while (cyfra / 10 > 0)
+                                        equationPartsList.Add(equationPart);
+                                        while (digit / 10 > 0)
                                         {
                                             indexCounter++;
-                                            cyfra = cyfra / 10;
+                                            digit = digit / 10;
                                         }
                                     }
                                 }
@@ -61,55 +61,55 @@ namespace CalculatorLib
 
                             case true:
 
-                                listaCzesciRownania.Add("-" + czescRownania);
+                                equationPartsList.Add("-" + equationPart);
                                 negativeValue = false;
                                 break;
 
                         }
                     }
-                    if (czescRownania == "(")
+                    if (equationPart == "(")
                     {
                         int indexCounterNext;
-                        listaCzesciRownania.Add(WpfCalculate(rownanie, indexCounter, out indexCounterNext));
+                        equationPartsList.Add(WpfCalculate(equation, indexCounter, out indexCounterNext));
                         indexCounter = indexCounterNext;
-                        czescRownania = listaCzesciRownania[listaCzesciRownania.Count - 1];
+                        equationPart = equationPartsList[equationPartsList.Count - 1];
                     }
                 
-                    if (czescRownania == ")")
+                    if (equationPart == ")")
                     {
                         break;
                     }
                     int ia;
-                    negativeValuePreviousCheck = Int32.TryParse(czescRownania, out ia);
-                    cyfra = 0;
+                    negativeValuePreviousCheck = Int32.TryParse(equationPart, out ia);
+                    digit = 0;
                 }
 
             }
 
 
 
-            int liczba;
-            for (int i = 0; i < listaCzesciRownania.Count; i++)
+            int number;
+            for (int i = 0; i < equationPartsList.Count; i++)
             {
-                bool checkIfnumber = Int32.TryParse(listaCzesciRownania[i], out liczba);
+                bool checkIfnumber = Int32.TryParse(equationPartsList[i], out number);
                 if (checkIfnumber != true)
                 {
-                    Double earlierNumber = Double.Parse(listaCzesciRownania[i - 1]);
-                    Double nextNumber = Double.Parse(listaCzesciRownania[i + 1]);
-                    switch (listaCzesciRownania[i])
+                    Double earlierNumber = Double.Parse(equationPartsList[i - 1]);
+                    Double nextNumber = Double.Parse(equationPartsList[i + 1]);
+                    switch (equationPartsList[i])
                     {
 
                         case "/":
 
                             earlierNumber = earlierNumber / nextNumber;
-                            listaCzesciRownania[i - 1] = earlierNumber.ToString();
-                            listaCzesciRownania[i + 1] = earlierNumber.ToString();
+                            equationPartsList[i - 1] = earlierNumber.ToString();
+                            equationPartsList[i + 1] = earlierNumber.ToString();
                             break;
 
                         case "*":
                             earlierNumber = earlierNumber * nextNumber;
-                            listaCzesciRownania[i - 1] = earlierNumber.ToString();
-                            listaCzesciRownania[i + 1] = earlierNumber.ToString();
+                            equationPartsList[i - 1] = earlierNumber.ToString();
+                            equationPartsList[i + 1] = earlierNumber.ToString();
                             break;
 
                         default:
@@ -119,23 +119,23 @@ namespace CalculatorLib
                 }
             }
 
-            for (int i = (listaCzesciRownania.Count - 1); i > 0; i--)
+            for (int i = (equationPartsList.Count - 1); i > 0; i--)
             {
-                bool checkIfnumber = Int32.TryParse(listaCzesciRownania[i], out liczba);
+                bool checkIfnumber = Int32.TryParse(equationPartsList[i], out number);
                 if (checkIfnumber != true)
                 {
-                    Double earlierNumber = Double.Parse(listaCzesciRownania[i - 1]);
-                    Double nextNumber = Double.Parse(listaCzesciRownania[i + 1]);
-                    switch (listaCzesciRownania[i])
+                    Double earlierNumber = Double.Parse(equationPartsList[i - 1]);
+                    Double nextNumber = Double.Parse(equationPartsList[i + 1]);
+                    switch (equationPartsList[i])
                     {
 
                         case "/":
 
-                            listaCzesciRownania[i - 1] = listaCzesciRownania[i + 1];
+                            equationPartsList[i - 1] = equationPartsList[i + 1];
                             break;
 
                         case "*":
-                            listaCzesciRownania[i - 1] = listaCzesciRownania[i + 1];
+                            equationPartsList[i - 1] = equationPartsList[i + 1];
                             break;
 
                         default:
@@ -145,36 +145,36 @@ namespace CalculatorLib
                 }
             }
 
-            for (int i = 0; i < listaCzesciRownania.Count; i++)
+            for (int i = 0; i < equationPartsList.Count; i++)
             {
-                bool checkIfNumber = Int32.TryParse(listaCzesciRownania[i], out liczba);
+                bool checkIfNumber = Int32.TryParse(equationPartsList[i], out number);
                 if (checkIfNumber != true)
                 {
-                    Double earlierNumber = Double.Parse(listaCzesciRownania[i - 1]);
-                    Double nextNumber = Double.Parse(listaCzesciRownania[i + 1]);
-                    switch (listaCzesciRownania[i])
+                    Double earlierNumber = Double.Parse(equationPartsList[i - 1]);
+                    Double nextNumber = Double.Parse(equationPartsList[i + 1]);
+                    switch (equationPartsList[i])
                     {
                         case "+":
                             earlierNumber = earlierNumber + nextNumber;
-                            listaCzesciRownania[i - 1] = earlierNumber.ToString();
-                            listaCzesciRownania[i + 1] = earlierNumber.ToString();
-                            listaCzesciRownania[i] = earlierNumber.ToString();
+                            equationPartsList[i - 1] = earlierNumber.ToString();
+                            equationPartsList[i + 1] = earlierNumber.ToString();
+                            equationPartsList[i] = earlierNumber.ToString();
                             break;
                         case "-":
                             earlierNumber = earlierNumber - nextNumber;
-                            listaCzesciRownania[i - 1] = earlierNumber.ToString();
-                            listaCzesciRownania[i + 1] = earlierNumber.ToString();
-                            listaCzesciRownania[i] = earlierNumber.ToString();
+                            equationPartsList[i - 1] = earlierNumber.ToString();
+                            equationPartsList[i + 1] = earlierNumber.ToString();
+                            equationPartsList[i] = earlierNumber.ToString();
                             break;
 
                         case "/":
-                            listaCzesciRownania[i + 1] = earlierNumber.ToString();
-                            listaCzesciRownania[i] = earlierNumber.ToString();
+                            equationPartsList[i + 1] = earlierNumber.ToString();
+                            equationPartsList[i] = earlierNumber.ToString();
                             break;
 
                         case "*":
-                            listaCzesciRownania[i + 1] = earlierNumber.ToString();
-                            listaCzesciRownania[i] = earlierNumber.ToString();
+                            equationPartsList[i + 1] = earlierNumber.ToString();
+                            equationPartsList[i] = earlierNumber.ToString();
                             break;
 
                         default:
@@ -186,20 +186,20 @@ namespace CalculatorLib
                 {
                     if (checkIfNumber == true)
                     {
-                        double wartosc;
-                        bool checkIfPreviousNumber = Double.TryParse(listaCzesciRownania[i - 1], out wartosc);
+                        double value;
+                        bool checkIfPreviousNumber = Double.TryParse(equationPartsList[i - 1], out value);
                         if (checkIfPreviousNumber == true)
                         {
-                            listaCzesciRownania[i] = listaCzesciRownania[i - 1];
+                            equationPartsList[i] = equationPartsList[i - 1];
                         }
 
                     }
                 }
             }
 
-            wynik = listaCzesciRownania[listaCzesciRownania.Count - 1];
+            result = equationPartsList[equationPartsList.Count - 1];
             indexCounterNew = indexCounter;
-            return wynik;
+            return result;
 
         }
     }

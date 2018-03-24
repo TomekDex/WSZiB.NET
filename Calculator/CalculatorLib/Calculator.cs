@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CalculatorLib;
 
 namespace CalculatorLib
 {
     public class Calculator : ICalculatable
     {
-        private string rownanie;
+        private string equation;
 
-        public string Calculate(string rownanie)
+        public string Calculate(string equation)
         {
-            this.rownanie = rownanie;
+            this.equation = equation;
             int ic;
-            rownanie = WpfCalculator.WpfCalculate(rownanie, 0, out ic);
-            return rownanie;
+            equation = WpfCalculator.WpfCalculate(equation, 0, out ic);
+            return equation;
         }
     }
 }
