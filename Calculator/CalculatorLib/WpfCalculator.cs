@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace CalculatorLib
 {
-    public class WpfCalculator 
+    public class WpfCalculator
     {
         public static string WpfCalculate(string equation, int indexCounter, out int indexCounterNew)
         {
@@ -18,54 +18,44 @@ namespace CalculatorLib
             bool negativeValuePreviousCheck = false;
             bool negativeValueDoubleCheck;
             bool negativeValue = false;
+            bool numberCheck;
             int digit;
 
 
             Regex exEquationLoader = new Regex(@"(?<czescRownania>((\D)|(\d+)))");
             MatchCollection mcEquation = exEquationLoader.Matches(equation, indexCounter);
-            foreach (Match mEquation in mcEquation)
+            foreach (Match mRownanie in mcEquation)
             {
-                if (indexCounter == mEquation.Index)
+                if (indexCounter == mRownanie.Index)
                 {
                     indexCounter++;
-                    string equationPart = mEquation.Groups["czescRownania"].Value;
+                    string equationPart = mRownanie.Groups["czescRownania"].Value;
 
                     if (equationPart != "(" && equationPart != ")")
                     {
-                        switch (negativeValue)
+                        numberCheck = Int32.TryParse(equationPart, out digit);
+                        if (numberCheck == true)
                         {
-                            case false:
+                            if (negativeValue == false) equationPartsList.Add(equationPart);
 
-                                negativeValueDoubleCheck = Int32.TryParse(equationPart, out digit);
-                                if (negativeValuePreviousCheck == true)
-                                {
-                                    equationPartsList.Add(equationPart);
-                                }
-                                if (negativeValuePreviousCheck == false)
-                                {
-                                    if (negativeValueDoubleCheck == false)
-                                    {
-                                        negativeValue = true;
-                                    }
-                                    if (negativeValueDoubleCheck == true)
-                                    {
-                                        equationPartsList.Add(equationPart);
-                                        while (digit / 10 > 0)
-                                        {
-                                            indexCounter++;
-                                            digit = digit / 10;
-                                        }
-                                    }
-                                }
-                                break;
-
-                            case true:
-
+                            if (negativeValue == true)
+                            {
                                 equationPartsList.Add("-" + equationPart);
                                 negativeValue = false;
-                                break;
-
+                            }
+                            while (digit / 10 > 0)
+                            {
+                                indexCounter++;
+                                digit = digit / 10;
+                            }
                         }
+                        if (numberCheck == false)
+                        {
+                            if (equationPart == "@") negativeValue = true;
+                            else equationPartsList.Add(equationPart);
+                        }
+
+
                     }
                     if (equationPart == "(")
                     {
@@ -74,7 +64,7 @@ namespace CalculatorLib
                         indexCounter = indexCounterNext;
                         equationPart = equationPartsList[equationPartsList.Count - 1];
                     }
-                
+
                     if (equationPart == ")")
                     {
                         break;
@@ -103,39 +93,15 @@ namespace CalculatorLib
 
                             earlierNumber = earlierNumber / nextNumber;
                             equationPartsList[i - 1] = earlierNumber.ToString();
-                            equationPartsList[i + 1] = earlierNumber.ToString();
+                            equationPartsList.RemoveRange(i, 2);
+                            i--;
                             break;
 
                         case "*":
                             earlierNumber = earlierNumber * nextNumber;
                             equationPartsList[i - 1] = earlierNumber.ToString();
-                            equationPartsList[i + 1] = earlierNumber.ToString();
-                            break;
-
-                        default:
-                            break;
-                    }
-
-                }
-            }
-
-            for (int i = (equationPartsList.Count - 1); i > 0; i--)
-            {
-                bool checkIfnumber = Int32.TryParse(equationPartsList[i], out number);
-                if (checkIfnumber != true)
-                {
-                    Double earlierNumber = Double.Parse(equationPartsList[i - 1]);
-                    Double nextNumber = Double.Parse(equationPartsList[i + 1]);
-                    switch (equationPartsList[i])
-                    {
-
-                        case "/":
-
-                            equationPartsList[i - 1] = equationPartsList[i + 1];
-                            break;
-
-                        case "*":
-                            equationPartsList[i - 1] = equationPartsList[i + 1];
+                            equationPartsList.RemoveRange(i, 2);
+                            i--;
                             break;
 
                         default:
@@ -157,25 +123,16 @@ namespace CalculatorLib
                         case "+":
                             earlierNumber = earlierNumber + nextNumber;
                             equationPartsList[i - 1] = earlierNumber.ToString();
-                            equationPartsList[i + 1] = earlierNumber.ToString();
-                            equationPartsList[i] = earlierNumber.ToString();
+                            equationPartsList.RemoveRange(i, 2);
+                            i--;
                             break;
                         case "-":
                             earlierNumber = earlierNumber - nextNumber;
                             equationPartsList[i - 1] = earlierNumber.ToString();
-                            equationPartsList[i + 1] = earlierNumber.ToString();
-                            equationPartsList[i] = earlierNumber.ToString();
+                            equationPartsList.RemoveRange(i, 2);
+                            i--;
                             break;
 
-                        case "/":
-                            equationPartsList[i + 1] = earlierNumber.ToString();
-                            equationPartsList[i] = earlierNumber.ToString();
-                            break;
-
-                        case "*":
-                            equationPartsList[i + 1] = earlierNumber.ToString();
-                            equationPartsList[i] = earlierNumber.ToString();
-                            break;
 
                         default:
                             break;
@@ -204,4 +161,3 @@ namespace CalculatorLib
         }
     }
 }
-
