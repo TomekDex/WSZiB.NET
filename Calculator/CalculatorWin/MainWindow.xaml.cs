@@ -29,6 +29,7 @@ namespace CalculatorWin
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Calculator calculator = new Calculator();
+            Operation.Text = EquationNormalizer.EqautionNormer(Operation.Text);
             Operation.Text = calculator.Calculate(Operation.Text);
         }
     }

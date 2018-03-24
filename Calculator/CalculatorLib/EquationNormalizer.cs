@@ -22,14 +22,14 @@ namespace CalculatorLib
                 switch (mEquation.Value)
                 {
                     case "-":
-                        if (mEquationPrevious == "-") normalizedEquation = normalizedEquation + "@";
+                        bool operatorChecker = false;
+                        if (mEquationPrevious == "-" || mEquationPrevious == "+" || mEquationPrevious == "*" || mEquationPrevious == "/") operatorChecker = true;
+                        if (operatorChecker == true) normalizedEquation = normalizedEquation + "@";
+                        if (operatorChecker == false) normalizedEquation = normalizedEquation + mEquation.Value;
                         break;
-
                     case "(":
                         if (numberCheck = Int32.TryParse(mEquationPrevious, out id) == true) normalizedEquation = normalizedEquation + "*(";
-
                         break;
-
                     default:
                         normalizedEquation = normalizedEquation + mEquation.Value;
                         break;

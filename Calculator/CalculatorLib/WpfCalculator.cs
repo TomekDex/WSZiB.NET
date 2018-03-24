@@ -11,14 +11,12 @@ namespace CalculatorLib
     {
         public static string WpfCalculate(string equation, int indexCounter, out int indexCounterNew)
         {
-
-            // int ia, ib ... not used in code storage for numbers from TryParse
             List<string> equationPartsList = new List<string>();
             string result = "0";
             bool negativeValue = false;
             bool numberCheck;
             int digit;
-            
+
             Regex exEquationLoader = new Regex(@"(?<czescRownania>((\D)|(\d+)))");
             MatchCollection mcEquation = exEquationLoader.Matches(equation, indexCounter);
             foreach (Match mRownanie in mcEquation)
@@ -34,7 +32,6 @@ namespace CalculatorLib
                         if (numberCheck == true)
                         {
                             if (negativeValue == false) equationPartsList.Add(equationPart);
-
                             if (negativeValue == true)
                             {
                                 equationPartsList.Add("-" + equationPart);
@@ -51,8 +48,6 @@ namespace CalculatorLib
                             if (equationPart == "@") negativeValue = true;
                             else equationPartsList.Add(equationPart);
                         }
-
-
                     }
                     if (equationPart == "(")
                     {
@@ -61,12 +56,7 @@ namespace CalculatorLib
                         indexCounter = indexCounterNext;
                         equationPart = equationPartsList[equationPartsList.Count - 1];
                     }
-
-                    if (equationPart == ")")
-                    {
-                        break;
-                    }
-                    int ia;
+                    if (equationPart == ")") break;
                     digit = 0;
                 }
 
@@ -106,7 +96,6 @@ namespace CalculatorLib
 
                 }
             }
-
             for (int i = 0; i < equationPartsList.Count; i++)
             {
                 bool checkIfNumber = Int32.TryParse(equationPartsList[i], out number);
@@ -149,11 +138,9 @@ namespace CalculatorLib
                     }
                 }
             }
-
             result = equationPartsList[equationPartsList.Count - 1];
             indexCounterNew = indexCounter;
             return result;
-
         }
     }
 }
