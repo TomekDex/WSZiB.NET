@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace CalculatorLib
@@ -41,8 +42,8 @@ namespace CalculatorLib
 
         private string SingleOperationCalculate(string[] parts, string operato, Func<double, double, double> operation)
         {
-            double left = double.Parse(Calculate(parts[0]));
-            double right = double.Parse(Calculate(string.Join(operato, parts, 1, parts.Length - 1)));
+            double right = double.Parse(Calculate(parts[parts.Length-1]));            
+            double left = double.Parse(Calculate(string.Join(operato, parts, 0, parts.Length - 1)));
             return operation(left, right).ToString();
         }
     }
