@@ -119,5 +119,13 @@ namespace CalculatorLib.Tests
             string testExpectedResult = "2+-2+2--3*1";
             Assert.AreEqual(testExpectedResult, testResult);
         }
+
+        [TestMethod()]
+        public void NegativeValuesAndMultipleMinusesTest()
+        {
+            string testResult = EquationNormalizer.EqautionNormer("2---1--(--1-1)");
+            string testExpectedResult = "2--1--(-1-1)";
+            Assert.AreEqual(testExpectedResult, testResult);
+        }
     }
 }

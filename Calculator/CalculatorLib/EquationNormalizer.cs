@@ -19,6 +19,7 @@ namespace CalculatorLib
             string normalizedEquation = "";
             int id;/*non used number for TryParse method to work*/
             bool numberCheck;
+            bool negativeValuePrevious = false;
             int bracketCounter = 0; //counts number of opened and closed brackets if not 0 throws exeption
             Regex exEquationNormalizerLoader = new Regex(@"(\D|\d+)");
             MatchCollection mcEquation = exEquationNormalizerLoader.Matches(equation);
@@ -27,8 +28,8 @@ namespace CalculatorLib
                 bool operatorCheck = false; //bool variable used to reconginze if current match is operator known to WpfCalculator (+, -, * ...)
                 operatorCheckPrevious = false;
                 numberCheck = Int32.TryParse(mEquation.Value, out id);
-                if (mEquation.Value == "-" || mEquation.Value == "+" || mEquation.Value == "*" || mEquation.Value == "/") operatorCheck = true;
-                if (mEquationPrevious == "-" || mEquationPrevious == "+" || mEquationPrevious == "*" || mEquationPrevious == "/") operatorCheckPrevious = true;
+                if (mEquation.Value == "-" || mEquation.Value == "+" || mEquation.Value == "*" || mEquation.Value == "/" || mEquation.Value == "^") operatorCheck = true;
+                if (mEquationPrevious == "-" || mEquationPrevious == "+" || mEquationPrevious == "*" || mEquationPrevious == "/" || mEquation.Value == "^") operatorCheckPrevious = true;
                 if (endBracketPrevious == true && operatorCheck == true) endBracketPrevious = false;
                 if (endBracketPrevious == true && numberCheck == true) normalizedEquation = normalizedEquation + "*";
                 switch (mEquation.Value)
@@ -41,10 +42,12 @@ namespace CalculatorLib
                         if (numberCheckPrevious = Int32.TryParse(mEquationPrevious, out id) == true || endBracketPrevious == true)
                         {
                             normalizedEquation = normalizedEquation + "*(";
+                            negativeValuePrevious = false;
                         }
                         else
                         {
                             normalizedEquation = normalizedEquation + "(";
+                            negativeValuePrevious = false;
                         }
                         bracketCounter++;
                         endBracketPrevious = false;
@@ -56,17 +59,24 @@ namespace CalculatorLib
                     case "}":
                         normalizedEquation = normalizedEquation + ")";
                         endBracketPrevious = true;
+                        negativeValuePrevious = false;
                         bracketCounter--;
                         mEquationPrevious = mEquation.Value;
                         break;
                     case "-":
-                        normalizedEquation = normalizedEquation + mEquation.Value;
-                        if (numberCheck == true) endBracketPrevious = false;
-                        break;
+                        if (negativeValuePrevious == true) break;
+                        else
+                        {
+                            normalizedEquation = normalizedEquation + mEquation.Value;
+                            endBracketPrevious = false;
+                            if (operatorCheckPrevious == true || mEquationPrevious == "(") negativeValuePrevious = true;
+                            break;
+                        }
                     default:
                         if (operatorCheck == true && operatorCheckPrevious == true) break;
                         if (operatorCheck == true || numberCheck == true) normalizedEquation = normalizedEquation + mEquation.Value;
                         if (numberCheck == true) endBracketPrevious = false;
+                        negativeValuePrevious = false;
                         break;
                 }
                 if (operatorCheck == true || numberCheck == true) mEquationPrevious = mEquation.Value;

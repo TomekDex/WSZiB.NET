@@ -26,7 +26,10 @@ namespace CalculatorLib
                 {
                     indexCounter++;
                     string equationPart = mRownanie.Groups["czescRownania"].Value;
-
+                    if (equationPart == "^")
+                    {
+                        //Exponentiation
+                    }
                     if (equationPart != "(" && equationPart != ")")
                     {
                         numberCheck = Int32.TryParse(equationPart, out digit);
@@ -88,7 +91,6 @@ namespace CalculatorLib
                     {
                         // When adding new operation remember to add it to operationCheck and operationChekPrevious in EquationNormalizer 
                         case "/":
-
                             earlierNumber = earlierNumber / nextNumber;
                             equationPartsList[i - 1] = earlierNumber.ToString();
                             equationPartsList.RemoveRange(i, 2);

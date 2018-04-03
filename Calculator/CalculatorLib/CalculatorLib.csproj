@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Calculator.cs" />
     <Compile Include="EquationNormalizer.cs" />
+    <Compile Include="Exponentation.cs" />
     <Compile Include="WpfCalculator.cs" />
     <Compile Include="ICalculatable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
