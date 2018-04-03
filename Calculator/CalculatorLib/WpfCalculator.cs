@@ -16,19 +16,21 @@ namespace CalculatorLib
             bool negativeValue = false;
             bool numberCheck;
             int digit;
+            int indexCounterAddition;
             bool previousNumber = false; //??
 
             Regex exEquationLoader = new Regex(@"(?<czescRownania>((\D)|(\d+)))");
             MatchCollection mcEquation = exEquationLoader.Matches(equation, indexCounter);
-            foreach (Match mRownanie in mcEquation)
+            foreach (Match mEquation in mcEquation)
             {
-                if (indexCounter == mRownanie.Index)
+                if (indexCounter == mEquation.Index)
                 {
                     indexCounter++;
-                    string equationPart = mRownanie.Groups["czescRownania"].Value;
+                    string equationPart = mEquation.Groups["czescRownania"].Value;
                     if (equationPart == "^")
                     {
                         //Exponentiation
+                        equationPart = Exponentation(mEquation, mEquation.Index), out indexCounterAddition;
                     }
                     if (equationPart != "(" && equationPart != ")")
                     {
