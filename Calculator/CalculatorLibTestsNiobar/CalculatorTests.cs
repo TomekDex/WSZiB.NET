@@ -60,7 +60,7 @@ namespace CalculatorLib.Tests
         public void LongerEquationTest()
         {
             int ia;
-            string longerEquationTestResult = WpfCalculator.WpfCalculate("2*(2+1)/@3+5", 0, out ia);
+            string longerEquationTestResult = WpfCalculator.WpfCalculate("2*(2+1)/-3+5", 0, out ia);
             string longerEquationTestExpectedResult = "3";
             Assert.AreEqual(longerEquationTestExpectedResult, longerEquationTestResult);
         }
@@ -70,7 +70,7 @@ namespace CalculatorLib.Tests
         {
             Calculator calculatorTest = new Calculator();
             string testResult = EquationNormalizer.EqautionNormer("2(2+1)/-$#hdgsf3+as5gfd");
-            string testExpectedResult = "2*(2+1)/@3+5";
+            string testExpectedResult = "2*(2+1)/-3+5";
             Assert.AreEqual(testExpectedResult, testResult);
         }
 
@@ -81,6 +81,42 @@ namespace CalculatorLib.Tests
             string testResult = EquationNormalizer.EqautionNormer("2(2+1)/-$#hdgsf3+as5gfd");
             testResult = calculatorTest.Calculate(testResult);
             string testExpectedResult = "3";
+            Assert.AreEqual(testExpectedResult, testResult);
+        }
+
+        [TestMethod()]
+        public void NegativeValueAfterBracket()
+        {
+            Calculator calculatorTest = new Calculator();
+            string testResult = EquationNormalizer.EqautionNormer("2(2+1)-$#hdgsf-3+as5gfd");
+            testResult = calculatorTest.Calculate(testResult);
+            string testExpectedResult = "14";
+            Assert.AreEqual(testExpectedResult, testResult);
+        }
+
+        [TestMethod()]
+        public void WeirdBracketsTest()
+        {
+            Calculator calculatorTest = new Calculator();
+            string testResult = EquationNormalizer.EqautionNormer("<1+1}[2+2]");
+            testResult = calculatorTest.Calculate(testResult);
+            string testExpectedResult = "8";
+            Assert.AreEqual(testExpectedResult, testResult);
+        }
+
+        [TestMethod()]
+        public void TooManyBracketsTest()
+        {
+            string testResult = EquationNormalizer.EqautionNormer("2(2+1))");
+            string testExpectedResult = "too many brackets";
+            Assert.AreEqual(testExpectedResult, testResult);
+        }
+
+        [TestMethod()]
+        public void TooManyOperatorsTest()
+        {
+            string testResult = EquationNormalizer.EqautionNormer("2+-2++2--3*+*/+1");
+            string testExpectedResult = "2+-2+2--3*1";
             Assert.AreEqual(testExpectedResult, testResult);
         }
     }

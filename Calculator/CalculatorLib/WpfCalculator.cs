@@ -16,6 +16,7 @@ namespace CalculatorLib
             bool negativeValue = false;
             bool numberCheck;
             int digit;
+            bool previousNumber = false; //??
 
             Regex exEquationLoader = new Regex(@"(?<czescRownania>((\D)|(\d+)))");
             MatchCollection mcEquation = exEquationLoader.Matches(equation, indexCounter);
@@ -42,16 +43,27 @@ namespace CalculatorLib
                                 indexCounter++;
                                 digit = digit / 10;
                             }
+                            previousNumber = true;
                         }
                         if (numberCheck == false)
                         {
-                            if (equationPart == "@") negativeValue = true;
+                            if (equationPart == "-")
+                            {
+                                if (previousNumber == false)
+                                {
+                                    negativeValue = true;
+                                    previousNumber = true;
+                                }
+                                else equationPartsList.Add(equationPart);
+                            }
                             else equationPartsList.Add(equationPart);
+                            previousNumber = false;
                         }
                     }
                     if (equationPart == "(")
                     {
                         int indexCounterNext;
+                        previousNumber = true;
                         equationPartsList.Add(WpfCalculate(equation, indexCounter, out indexCounterNext));
                         indexCounter = indexCounterNext;
                         equationPart = equationPartsList[equationPartsList.Count - 1];

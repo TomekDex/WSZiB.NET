@@ -19,6 +19,7 @@ namespace CalculatorLib
             string normalizedEquation = "";
             int id;/*non used number for TryParse method to work*/
             bool numberCheck;
+            int bracketCounter = 0; //counts number of opened and closed brackets if not 0 throws exeption
             Regex exEquationNormalizerLoader = new Regex(@"(\D|\d+)");
             MatchCollection mcEquation = exEquationNormalizerLoader.Matches(equation);
             foreach (Match mEquation in mcEquation)
@@ -32,26 +33,49 @@ namespace CalculatorLib
                 if (endBracketPrevious == true && numberCheck == true) normalizedEquation = normalizedEquation + "*";
                 switch (mEquation.Value)
                 {
-                    case "-":
-                        if (operatorCheckPrevious == true) normalizedEquation = normalizedEquation + "@";
-                        if (operatorCheckPrevious == false) normalizedEquation = normalizedEquation + mEquation.Value;
-                        break;
+
                     case "(":
-                        if (numberCheckPrevious = Int32.TryParse(mEquationPrevious, out id) == true) normalizedEquation = normalizedEquation + "*(";
-                        else normalizedEquation = normalizedEquation + mEquation.Value;
+                    case "<":
+                    case "[":
+                    case "{":
+                        if (numberCheckPrevious = Int32.TryParse(mEquationPrevious, out id) == true || endBracketPrevious == true)
+                        {
+                            normalizedEquation = normalizedEquation + "*(";
+                        }
+                        else
+                        {
+                            normalizedEquation = normalizedEquation + "(";
+                        }
+                        bracketCounter++;
+                        endBracketPrevious = false;
+                        mEquationPrevious = mEquation.Value;
                         break;
                     case ")":
-                        normalizedEquation = normalizedEquation + mEquation.Value;
+                    case ">":
+                    case "]":
+                    case "}":
+                        normalizedEquation = normalizedEquation + ")";
                         endBracketPrevious = true;
+                        bracketCounter--;
+                        mEquationPrevious = mEquation.Value;
+                        break;
+                    case "-":
+                        normalizedEquation = normalizedEquation + mEquation.Value;
+                        if (numberCheck == true) endBracketPrevious = false;
                         break;
                     default:
+                        if (operatorCheck == true && operatorCheckPrevious == true) break;
                         if (operatorCheck == true || numberCheck == true) normalizedEquation = normalizedEquation + mEquation.Value;
-                        Console.WriteLine();
+                        if (numberCheck == true) endBracketPrevious = false;
                         break;
                 }
                 if (operatorCheck == true || numberCheck == true) mEquationPrevious = mEquation.Value;
+
             }
-            equation = normalizedEquation;
+
+            if (bracketCounter == 0) equation = normalizedEquation;
+            else equation = "too many brackets";
+
             return equation;
         }
     }

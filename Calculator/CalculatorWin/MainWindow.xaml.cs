@@ -30,7 +30,8 @@ namespace CalculatorWin
         {
             Calculator calculator = new Calculator();
             Operation.Text = EquationNormalizer.EqautionNormer(Operation.Text);
-            Operation.Text = calculator.Calculate(Operation.Text);
+            if (Operation.Text == "too many brackets") Operation.Text = "too many brackets in equation";
+            else Operation.Text = calculator.Calculate(Operation.Text);
         }
     }
 }
