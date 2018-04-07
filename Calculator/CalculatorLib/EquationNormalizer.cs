@@ -29,7 +29,7 @@ namespace CalculatorLib
                 operatorCheckPrevious = false;
                 numberCheck = Int32.TryParse(mEquation.Value, out id);
                 if (mEquation.Value == "-" || mEquation.Value == "+" || mEquation.Value == "*" || mEquation.Value == "/" || mEquation.Value == "^") operatorCheck = true;
-                if (mEquationPrevious == "-" || mEquationPrevious == "+" || mEquationPrevious == "*" || mEquationPrevious == "/" || mEquation.Value == "^") operatorCheckPrevious = true;
+                if (mEquationPrevious == "-" || mEquationPrevious == "+" || mEquationPrevious == "*" || mEquationPrevious == "/" || mEquationPrevious == "^") operatorCheckPrevious = true;
                 if (endBracketPrevious == true && operatorCheck == true) endBracketPrevious = false;
                 if (endBracketPrevious == true && numberCheck == true) normalizedEquation = normalizedEquation + "*";
                 switch (mEquation.Value)

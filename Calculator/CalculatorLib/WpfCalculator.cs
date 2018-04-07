@@ -16,7 +16,7 @@ namespace CalculatorLib
             bool negativeValue = false;
             bool numberCheck;
             int digit;
-            int indexCounterAddition;
+            //int indexCounterAddition;
             bool previousNumber = false; //??
 
             Regex exEquationLoader = new Regex(@"(?<czescRownania>((\D)|(\d+)))");
@@ -27,11 +27,6 @@ namespace CalculatorLib
                 {
                     indexCounter++;
                     string equationPart = mEquation.Groups["czescRownania"].Value;
-                    if (equationPart == "^")
-                    {
-                        //Exponentiation
-                        equationPart = Exponentation(mEquation, mEquation.Index), out indexCounterAddition;
-                    }
                     if (equationPart != "(" && equationPart != ")")
                     {
                         numberCheck = Int32.TryParse(equationPart, out digit);
@@ -79,9 +74,17 @@ namespace CalculatorLib
 
             }
 
-
-
             int number;
+            for (int i = 0; i < equationPartsList.Count; i++)
+            {
+                if (equationPartsList[i] == "^")
+                {
+                    Double earlierNumber = Double.Parse(equationPartsList[i - 1]);
+                    Double nextNumber = Double.Parse(equationPartsList[i + 1]);
+                    earlierNumber = Math.Pow(earlierNumber, nextNumber);
+                    equationPartsList.RemoveRange(i, 2);
+                }
+            }
             for (int i = 0; i < equationPartsList.Count; i++)
             {
                 bool checkIfnumber = Int32.TryParse(equationPartsList[i], out number);

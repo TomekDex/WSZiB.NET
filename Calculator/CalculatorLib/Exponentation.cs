@@ -36,7 +36,7 @@ namespace CalculatorLib
                         if (bracketCounter == 0)
                         {
                             exponentationEnd = true;
-                            exponentationValue = exponentationValue + mExponentation.Value
+                            exponentationValue = exponentationValue + mExponentation.Value;
                         }
                     }
                 }
